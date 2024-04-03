@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>M2K Dashboard</title>
+    <title>Labelers Dashboard</title>
     <style>
+        html, body {
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(to bottom, #334d50, #cbcaa5);
             color: #333;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
         header {
             background-color: #2c3e50;
@@ -36,7 +41,7 @@
         }
         main {
             padding: 20px;
-            padding-top: 60px; /* Add space for the fixed header */
+            flex: 1;
         }
         .card {
             background: #fff;
@@ -44,7 +49,6 @@
             padding: 20px;
             margin: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: box-shadow 0.3s ease;
         }
         .card:hover {
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
@@ -55,53 +59,21 @@
             flex-wrap: wrap;
             margin-top: 20px;
         }
-        
     </style>
 </head>
 <body>
     <header>
-        <h1>M2K Dashboard</h1>
+        <h1>Labelers Dashboard</h1>
         <a href="landingpage.html" class="logout-btn">Logout</a>
     </header>
     <main>
         <section class="dashboard">
-            <!-- Total Labelers and Researchers -->
             <div class="card">
-                <h3>Total Labelers</h3>
-                <p>Number here</p>
-                <h3>Total Researchers</h3>
-                <p>Number here</p>
+                <h3>Your Activities</h3>
+                <p>Number of ads labeled: X</p>
             </div>
-
-            <!-- Active and Inactive Users -->
-            <div class="card">
-                <h3>Active Users</h3>
-                <!-- Active Users List -->
-                <ul>
-                    <li>User 1 - Ads Labeled: 150</li>
-                    <li>User 2 - Ads Labeled: 200</li>
-                    
-                </ul>
-                <h3>Disabled Users</h3>
-                <!-- Disabled Users List -->
-                <ul>
-                    <li>User 3 - Ads Labeled: 50</li>
-                    <li>User 4 - Ads Labeled: 30</li>
-                   
-                </ul>
-            </div>
-
-            <!-- Data Summary -->
-            <div class="card">
-                <h3>Total Data</h3>
-                <p>Number of ads in the database</p>
-                <h3>Upload New Data</h3>
-                <!-- Upload Functionality (Placeholder) -->
-                <input type="file" id="data-upload" name="data-upload">
-                <button>Upload</button>
-            </div>
-           
         </section>
     </main>
 </body>
 </html>
+
