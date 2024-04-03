@@ -25,6 +25,6 @@ urlpatterns = [
     path('researchers-login.html', rlogin),
     path('labelers-login.html', llogin),
     path('dashboard.html', ldashboard),
-    path('researchers-dashboard.html',rdashboard),
+    path('researchers dashboard.html',rdashboard),
     path('landingpage.html', landing)
 ]
