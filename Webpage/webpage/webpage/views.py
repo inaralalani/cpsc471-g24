@@ -12,6 +12,9 @@ def rlogin(request):
 def llogin(request):
     template = loader.get_template('labelers-login.html')
     return HttpResponse(template.render())
-def dashboard(request):
+def ldashboard(request):
     template = loader.get_template('dashboard.html')
+    return HttpResponse(template.render())
+def rdashboard(request):
+    template = loader.get_template('researchers-dashboard.html')
     return HttpResponse(template.render())

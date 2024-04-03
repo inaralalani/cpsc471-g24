@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from webpage.views import landing, options, rlogin, llogin, dashboard
+from webpage.views import landing, options, rlogin, llogin, ldashboard, rdashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +24,7 @@ urlpatterns = [
     path('options.html', options),
     path('researchers-login.html', rlogin),
     path('labelers-login.html', llogin),
-    path('dashboard.html', dashboard)
+    path('dashboard.html', ldashboard),
+    path('researchers-dashboard.html',rdashboard),
+    path('landingpage.html', landing)
 ]
