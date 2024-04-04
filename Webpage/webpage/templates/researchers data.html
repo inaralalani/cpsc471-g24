@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Researcher Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #cbcaa5, #334d50);
+            color: #333;
+            padding: 20px;
+        }
+        .upload-section {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .data-management {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <section class="data-management">
+        <h2>Filter Data</h2>
+        <div>
+            <label for="filter">Filter by:</label>
+            <select id="filter">
+                <option value="all">All</option>
+                <option value="recent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="upload-section">
+        <h2>Upload Data</h2>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="dataFile" id="dataFile">
+            <button type="submit">Upload</button>
+        </form>
+    </section>
+
+    <section class="data-management">
+        <h2>All Data</h2>
+        <div id="data-list">
+            <p>List of uploaded data will appear here...</p>
+        </div>
+    </section>
+</body>
+</html>
