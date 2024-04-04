@@ -1,3 +1,4 @@
 import duckdb
-db = duckdb.connect("m2k.duckdb")
-print(db.sql("SHOW ALL TABLES"))
+import numpy
+db = duckdb.connect('user key.duckdb')
+print(db.sql("SELECT * FROM KEY WHERE Usertype!='researcher'"))
