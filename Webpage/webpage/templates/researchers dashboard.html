@@ -43,23 +43,33 @@
             padding: 20px;
             flex: 1;
         }
-        .card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
         }
-        .card:hover {
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        .info-section {
+            display: none;
+            margin-top: 10px;
         }
-        .dashboard {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+        .info-section.active {
+            display: block;
+        }
+        .upload-section {
+            margin-top: 20px;
+        }
+        .data-management {
             margin-top: 20px;
         }
     </style>
+    <script>
+        function toggleInfo() {
+            var infoSection = document.querySelector('.info-section');
+            if (infoSection) {
+                infoSection.classList.toggle('active');
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -67,10 +77,39 @@
         <a href="landingpage.html" class="logout-btn">Logout</a>
     </header>
     <main>
-        <section class="dashboard">
-            <div class="card">
-                <h3>Research Data</h3>
-                <p>Total studies completed: Y</p>
+        <section>
+            <h2>Video Resource</h2>
+            <a href="https://www.youtube.com/watch?v=JD-age0BPVo" target="_blank">
+                <img src="https://img.youtube.com/vi/JD-age0BPVo/maxresdefault.jpg" alt="Video Thumbnail" class="video-thumbnail">
+            </a>
+            <button onclick="toggleInfo()">▼</button>
+            <div class="info-section">
+                <p>Information about the video will be displayed here.</p>
+            </div>
+        </section>
+
+        <section class="upload-section">
+            <h2>Upload Data</h2>
+            <form>
+                <input type="file" name="dataFile" id="dataFile">
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <section class="data-management">
+            <h2>Uploaded Data</h2>
+            <div>
+                <label for="filter">Filter by:</label>
+                <select id="filter">
+                    <option value="all">All</option>
+                    <option value="recent">Most Recent</option>
+                    <option value="oldest">Oldest</option>
+                </select>
+            </div>
+            <!-- Data list will go here -->
+            <div id="data-list">
+                <p>List of uploaded data...</p>
+                <!-- Dynamically list uploaded data with filtering applied -->
             </div>
         </section>
     </main>
