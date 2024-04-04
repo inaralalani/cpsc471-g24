@@ -1,20 +1,19 @@
 from django.http import HttpResponse
 from django.template import loader
+import django.shortcuts as s
+import json
 def landing(request):
-    template = loader.get_template('landingpage.html')
-    return HttpResponse(template.render())
+    return s.render(request, 'landingpage.html')
 def options(request):
-    template = loader.get_template('options.html')
-    return HttpResponse(template.render())
+    return s.render(request, 'options.html')
 def rlogin(request):
-    template = loader.get_template('researchers-login.html')
-    return HttpResponse(template.render())
+    return s.render(request, 'researchers-login.html')
 def llogin(request):
-    template = loader.get_template('labelers-login.html')
-    return HttpResponse(template.render())
+    return s.render(request, 'labelers-login.html')
 def ldashboard(request):
-    template = loader.get_template('dashboard.html')
-    return HttpResponse(template.render())
+    print(request.POST.get('labeler-id'))
+    return s.render(request, 'labelers dashboard.html')
 def rdashboard(request):
-    template = loader.get_template('researchers dashboard.html')
-    return HttpResponse(template.render())
+    return s.render(request, 'researchers dashboard.html')
+def rdata(request):
+    return s.render(request, 'researchers data.html')

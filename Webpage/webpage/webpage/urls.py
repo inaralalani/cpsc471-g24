@@ -16,15 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from webpage.views import landing, options, rlogin, llogin, ldashboard, rdashboard
+import webpage.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', landing),
-    path('options.html', options),
-    path('researchers-login.html', rlogin),
-    path('labelers-login.html', llogin),
-    path('dashboard.html', ldashboard),
-    path('researchers dashboard.html',rdashboard),
-    path('landingpage.html', landing)
+    path('', views.landing, name='landing'),
+    path('options.html', views.options, name='options'),
+    path('researchers-login.html', views.rlogin, name='rlogin'),
+    path('labelers-login.html', views.llogin, name='llogin'),
+    path('labelers dashboard.html', views.ldashboard, name='ldashboard'),
+    path('researchers dashboard.html',views.rdashboard, name='rdashboard'),
+    path('landingpage.html', views.landing, name='landing'),
+    path('researchers data.html', views.rdata, name='rdata')
 ]
