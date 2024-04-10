@@ -1,4 +1,5 @@
 import duckdb
 import numpy
-db = duckdb.connect('user key.duckdb')
-print(db.sql("SELECT * FROM KEY WHERE Usertype!='researcher'"))
+db = duckdb.connect('m2kdashboard.db')
+print(db.sql("SHOW ALL TABLES"))
+print(db.sql("SELECT * FROM Techniques"))
