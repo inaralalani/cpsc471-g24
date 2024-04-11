@@ -12,13 +12,7 @@
             color: #333;
             padding: 20px;
         }
-        .upload-section {
-            margin-top: 20px;
-            background-color: #ecf0f1;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .data-management {
+        .section {
             margin-top: 20px;
             background-color: #ecf0f1;
             padding: 10px;
@@ -27,30 +21,59 @@
     </style>
 </head>
 <body>
-    <section class="data-management">
-        <h2>Filter Data</h2>
+    <!-- Foods Tab -->
+    <section class="section">
+        <h2>Foods</h2>
         <div>
-            <label for="filter">Filter by:</label>
-            <select id="filter">
+            <label for="food-filter">Filter by:</label>
+            <select id="food-filter">
                 <option value="all">All</option>
-                <option value="recent">Most Recent</option>
-                <option value="oldest">Oldest</option>
+                <option value="healthy">Healthy</option>
+                <option value="unhealthy">Unhealthy</option>
             </select>
+            <label for="food-eval">Eval method:</label>
+            <select id="food-eval">
+                <option value="all">All</option>
+                <!-- Add eval method options here -->
+            </select>
+            <input type="text" id="food-name" placeholder="Search by name">
         </div>
     </section>
 
-    <section class="upload-section">
-        <h2>Upload Data</h2>
-        <form action="upload.php" method="post" enctype="multipart/form-data">
-            <input type="file" name="dataFile" id="dataFile">
-            <button type="submit">Upload</button>
-        </form>
+    <!-- Labels Tab -->
+    <section class="section">
+        <h2>Labels</h2>
+        <div>
+            <label for="label-filter">Food ad:</label>
+            <select id="label-filter">
+                <option value="all">All</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <input type="text" id="product-name" placeholder="Search by product name">
+        </div>
     </section>
 
-    <section class="data-management">
-        <h2>All Data</h2>
-        <div id="data-list">
-            <p>List of uploaded data will appear here...</p>
+    <!-- Marketing Tab -->
+    <section class="section">
+        <h2>Marketing</h2>
+        <div>
+            <input type="text" id="marketing-feature" placeholder="Search feature">
+        </div>
+    </section>
+
+    <!-- Technique Tab -->
+    <section class="section">
+        <h2>Technique</h2>
+        <p>Details related to technique will be displayed here...</p>
+    </section>
+
+    <!-- Brand and Product Fields -->
+    <section class="section">
+        <h2>General Search</h2>
+        <div>
+            <input type="text" id="brand-name" placeholder="Brand name">
+            <input type="text" id="product-details" placeholder="Product details">
         </div>
     </section>
 </body>
