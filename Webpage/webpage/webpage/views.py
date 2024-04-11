@@ -18,8 +18,8 @@ def ldashboard(request):
             int(id) #check if it's actually an int, so as not to throw errors
         except:
             id = -1 #give -1 so it autofails the sql
-        pas = request.POST.get('labeler-password')
-        if(len(db.sql("SELECT * FROM Users WHERE user_id=" + str(id) + " AND user_password='" + pas + "' AND user_type!='researcher'").fetchnumpy().get('user_id')) != 0): #if username and password combo exist
+        pas = request.POST.get('labeler-password') #now with prepared statements to prevent SQL injection!
+        if(len(db.execute("SELECT * FROM Users WHERE user_id=? AND user_password=? AND user_type!='researcher'", [str(id),pas]).fetchnumpy().get('user_id')) != 0): #if username and password combo exist
             return s.render(request, 'labelers dashboard.html') #get the dashboard
         else: #otherwise go back to teh beginning for now
             return s.render(request, 'landingpage.html')
@@ -55,8 +55,8 @@ def rdashboard(request):
         except:
             id = -1  # give -1 so it autofails the sql
         pas = request.POST.get('researcher-password')
-        if (len(db.sql(
-                "SELECT * FROM Users WHERE user_id=" + str(id) + " AND user_password='" + pas + "' AND user_type='researcher'").fetchnumpy().get(
+        if (len(db.execute(
+                "SELECT * FROM Users WHERE user_id=? AND user_password=? AND user_type='researcher'", [str(id),pas]).fetchnumpy().get(
                 'user_id')) != 0):  # if username and password combo exist
             return s.render(request, 'researchers dashboard.html')  # get the dashboard
         else:  # otherwise go back to teh beginning for now
@@ -71,6 +71,7 @@ def rdata(request):
     else:
         food = db.sql("SELECT * FROM Foods").fetchnumpy()  # assume get the food data
         label = db.sql("SELECT * FROM Labels").fetchnumpy() # same as the first
+        market = db.sql("SELECT * FROM Marketing").fetchnumpy()
     technique = db.sql("SELECT * FROM Techniques").fetchnumpy()
     foodtable = [[None] * 6 for i in range(len(food.get('food_id')))] #list of lists to make a table, initialized with enough size
     for i in range(len(food.get('food_id'))): #create a row-by-row table
@@ -140,8 +141,8 @@ def formatfood(request): # helper function to format the food sql request, you'l
             if (foodname != None and foodname!=""):
                 foodreq += " AND "
         if (foodname != None and foodname!=""):
-            foodreq += "name='" + foodname + "'"
-        food = db.sql(foodreq).fetchnumpy()
+            foodreq += "name=?"
+        food = db.execute(foodreq, [foodname]).fetchnumpy()
     return food
 
 def formatlabel(request): #stuff for formatting labels
@@ -162,14 +163,13 @@ def formatlabel(request): #stuff for formatting labels
             if prodname != '' and prodname != None:
                 labelreq += " AND "
         if (prodname != None and prodname!=""):
-            labelreq += "product='" + prodname + "'"
-        label = db.sql(labelreq).fetchnumpy()
+            labelreq += "product=?"
+        label = db.execute(labelreq, [prodname]).fetchnumpy()
     return label
 def formatmarket(request):
     db = duckdb.connect('m2kdashboard.db')  # get the db
     featurename = request.POST.get('marketing-feature')
     if (featurename != None and featurename != ""):
-        print("SELECT * FROM Marketing WHERE feature='" + featurename + "'")
-        return db.sql("SELECT * FROM Marketing WHERE feature='" + featurename + "'").fetchnumpy()
+        return db.execute("SELECT * FROM Marketing WHERE feature=?", [featurename]).fetchnumpy()
     elif (featurename == None or featurename == ""):
         return db.sql("SELECT * FROM Marketing").fetchnumpy()
