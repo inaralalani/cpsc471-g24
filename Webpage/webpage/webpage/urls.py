@@ -27,5 +27,9 @@ urlpatterns = [
     path('labelers dashboard.html', views.ldashboard, name='ldashboard'),
     path('researchers dashboard.html',views.rdashboard, name='rdashboard'),
     path('landingpage.html', views.landing, name='landing'),
-    path('researchers data.html', views.rdata, name='rdata')
+    path('researchers data.html', views.rdata, name='rdata'),
+    path('foods.html', views.fooddata, name='fooddata'),
+    path('labels.html', views.labeldata, name='labeldata'),
+    path('marketing.html', views.marketdata, name='marketdata'),
+    path('technique.html', views.techdata, name='techdata')
 ]

@@ -61,54 +61,49 @@ def rdashboard(request):
             return s.render(request, 'researchers dashboard.html')  # get the dashboard
         else:  # otherwise go back to teh beginning for now
             return s.render(request, 'landingpage.html')
+    else:
+        return s.render(request, 'researchers dashboard.html')  # get the dashboard
 def rdata(request):
+    return s.render(request, 'researchers data.html')
+
+def fooddata(request):
     db = duckdb.connect('m2kdashboard.db')  # get the db
     if request.method == "POST":
         food = formatfood(request)
-        label = formatlabel(request)
-        market = formatmarket(request)
-
     else:
         food = db.sql("SELECT * FROM Foods").fetchnumpy()  # assume get the food data
-        label = db.sql("SELECT * FROM Labels").fetchnumpy() # same as the first
-        market = db.sql("SELECT * FROM Marketing").fetchnumpy()
-    technique = db.sql("SELECT * FROM Techniques").fetchnumpy()
-    foodtable = [[None] * 6 for i in range(len(food.get('food_id')))] #list of lists to make a table, initialized with enough size
-    for i in range(len(food.get('food_id'))): #create a row-by-row table
-        foodtable[i][0] = food.get('food_id')[i]
-        foodtable[i][1] = food.get('ad_id')[i]
-        foodtable[i][2] = food.get('one_many')[i]
-        foodtable[i][3] = food.get('name')[i]
-        foodtable[i][4] = food.get('eval_method')[i]
-        foodtable[i][5] = food.get('health')[i]
-    labeltable = [[None] * 8 for i in range(len(label.get('user_upload')))] #now for labels
-    for i in range(len(label.get('user_upload'))):
-        labeltable[i][0] = label.get('user_upload')[i]
-        labeltable[i][1] = label.get('ad_id')[i]
-        labeltable[i][2] = label.get('video_id')[i]
-        labeltable[i][3] = label.get('labeller_id')[i]
-        labeltable[i][4] = label.get('ad_or_no')[i]
-        labeltable[i][5] = label.get('ad_brand')[i]
-        labeltable[i][6] = label.get('product')[i]
-        labeltable[i][7] = label.get('food_or_no')[i]
-    markettable = [[None] * 5 for i in range(len(market.get('review_id')))]
-    for i in range(len(market.get('review_id'))):
-        markettable[i][0] = market.get('review_id')[i]
-        markettable[i][1] = market.get('ad_id')[i]
-        markettable[i][2] = market.get('technique_id')[i]
-        markettable[i][3] = market.get('feature')[i]
-        markettable[i][4] = market.get('character')[i]
-    techtable = [[None] * 2 for i in range(len(technique.get('technique_id')))]
-    for i in range(len(technique.get('technique_id'))):
-        techtable[i][0] = technique.get('technique_id')[i]
-        techtable[i][1] = technique.get('technique_name')[i]
+    foodtable = cfoodtable(food)
     context = {}
     context['food'] = foodtable
-    context['label'] = labeltable
-    context['market'] = markettable
-    context['technique'] = techtable
-    return s.render(request, 'researchers data.html', context=context)
+    return s.render(request, 'foods.html', context=context)
 
+def labeldata(request):
+    db = duckdb.connect('m2kdashboard.db')  # get the db
+    if request.method == "POST":
+        label = formatlabel(request)
+    else:
+        label = db.sql("SELECT * FROM Labels").fetchnumpy() # same as the first
+    labeltable = clabeltable(label)
+    context = {}
+    context['label'] = labeltable
+    return s.render(request, 'labels.html', context=context)
+def marketdata(request):
+    db = duckdb.connect('m2kdashboard.db')  # get the db
+    if request.method == "POST":
+        market = formatmarket(request)
+    else:
+        market = db.sql("SELECT * FROM Marketing").fetchnumpy()
+    markettable = cmarkettable(market)
+    context = {}
+    context['market'] = markettable
+    return s.render(request, 'marketing.html', context=context)
+def techdata(request):
+    db = duckdb.connect('m2kdashboard.db')  # get the db
+    technique = db.sql("SELECT * FROM Techniques").fetchnumpy()
+    techtable = ctechtable(technique)
+    context = {}
+    context['technique'] = techtable
+    return s.render(request, 'technique.html', context=context)
 def formatfood(request): # helper function to format the food sql request, you'll see more of these
     db = duckdb.connect('m2kdashboard.db')  # get the db
     foodfilter = request.POST.get('food-filter', None)
@@ -173,3 +168,45 @@ def formatmarket(request):
         return db.execute("SELECT * FROM Marketing WHERE feature=?", [featurename]).fetchnumpy()
     elif (featurename == None or featurename == ""):
         return db.sql("SELECT * FROM Marketing").fetchnumpy()
+
+def cfoodtable(food):
+    lenny = len(food.get('food_id'))
+    foodtable = [[None] * 6 for i in range(lenny)]  # list of lists to make a table, initialized with enough size
+    for i in range(lenny):  # create a row-by-row table
+        foodtable[i][0] = food.get('food_id')[i]
+        foodtable[i][1] = food.get('ad_id')[i]
+        foodtable[i][2] = food.get('one_many')[i]
+        foodtable[i][3] = food.get('name')[i]
+        foodtable[i][4] = food.get('eval_method')[i]
+        foodtable[i][5] = food.get('health')[i]
+    return foodtable
+def clabeltable(label):
+    lenny = len(label.get('user_upload'))
+    labeltable = [[None] * 8 for i in range(lenny)]  # now for labels
+    for i in range(lenny):
+        labeltable[i][0] = label.get('user_upload')[i]
+        labeltable[i][1] = label.get('ad_id')[i]
+        labeltable[i][2] = label.get('video_id')[i]
+        labeltable[i][3] = label.get('labeller_id')[i]
+        labeltable[i][4] = label.get('ad_or_no')[i]
+        labeltable[i][5] = label.get('ad_brand')[i]
+        labeltable[i][6] = label.get('product')[i]
+        labeltable[i][7] = label.get('food_or_no')[i]
+    return labeltable
+def cmarkettable(market):
+    lenny = len(market.get('review_id'))
+    markettable = [[None] * 5 for i in range(lenny)]
+    for i in range(lenny):
+        markettable[i][0] = market.get('review_id')[i]
+        markettable[i][1] = market.get('ad_id')[i]
+        markettable[i][2] = market.get('technique_id')[i]
+        markettable[i][3] = market.get('feature')[i]
+        markettable[i][4] = market.get('character')[i]
+    return markettable
+def ctechtable(technique):
+    lenny = len(technique.get('technique_id'))
+    techtable = [[None] * 2 for i in range(lenny)]
+    for i in range(lenny):
+        techtable[i][0] = technique.get('technique_id')[i]
+        techtable[i][1] = technique.get('technique_name')[i]
+    return techtable
