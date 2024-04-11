@@ -12,13 +12,7 @@
             color: #333;
             padding: 20px;
         }
-        .upload-section {
-            margin-top: 20px;
-            background-color: #ecf0f1;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .data-management {
+        .section {
             margin-top: 20px;
             background-color: #ecf0f1;
             padding: 10px;
@@ -27,31 +21,124 @@
     </style>
 </head>
 <body>
-    <section class="data-management">
-        <h2>Filter Data</h2>
+    <form method="post">{% csrf_token %}
+    <!-- Foods Tab -->
+    <section class="section">
+
+            <h2>Foods</h2>
         <div>
-            <label for="filter">Filter by:</label>
-            <select id="filter">
+            <label for="food-filter">Filter by:</label>
+            <select id="food-filter" name="food-filter">
                 <option value="all">All</option>
-                <option value="recent">Most Recent</option>
-                <option value="oldest">Oldest</option>
+                <option value="healthy">Healthy</option>
+                <option value="unhealthy">Unhealthy</option>
             </select>
+            <label for="food-eval">Eval method:</label>
+            <select id="food-eval" name="food-eval">
+                <option value="all">All</option>
+                <option value="healthcan">Health Canada</option>
+                <option value="uoft">U of T</option>
+                <option value="limited">Limited</option>
+            </select>
+            <input type="text" id="food-name" name="food-name" placeholder="Search by name">
+            <button type="submit" class="submit-btn">Update</button>
         </div>
+        <table>
+            <tr>
+                <th>Food ID</th>
+                <th>Ad ID</th>
+                <th>One or Multiple</th>
+                <th>Food Name</th>
+                <th>Evaluation Method</th>
+                <th>Food Health</th>
+            </tr>
+            {% for data in food %}
+            <tr>
+                {% for value in data %}
+                    <td>{{value}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </section>
 
-    <section class="upload-section">
-        <h2>Upload Data</h2>
-        <form action="upload.php" method="post" enctype="multipart/form-data">
-            <input type="file" name="dataFile" id="dataFile">
-            <button type="submit">Upload</button>
-        </form>
+    <!-- Labels Tab -->
+    <section class="section">
+        <h2>Labels</h2>
+        <div>
+            <label for="label-filter">Food ad:</label>
+            <select id="label-filter" name="label-filter">
+                <option value="all">All</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <input type="text" id="product-name" name="product-name" placeholder="Search by product name">
+        </div>
+            <button type="submit" class="submit-btn">Update</button>
+        <table>
+            <tr>
+                <th>User Uploaded</th>
+                <th>Ad ID</th>
+                <th>Video Id (Hash)</th>
+                <th>Labeller ID</th>
+                <th>Is this an ad?</th>
+                <th>Ad Brand</th>
+                <th>Product Name</th>
+                <th>Is this a food ad?</th>
+            </tr>
+            {% for data in label %}
+            <tr>
+                {% for value in data %}
+                    <td>{{value}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </section>
 
-    <section class="data-management">
-        <h2>All Data</h2>
-        <div id="data-list">
-            <p>List of uploaded data will appear here...</p>
+    <!-- Marketing Tab -->
+    <section class="section">
+        <h2>Marketing</h2>
+        <div>
+            <input type="text" id="marketing-feature" name="marketing-feature" placeholder="Search feature">
         </div>
+        <button type="submit" class="submit-btn">Update</button>
+        <table>
+            <tr>
+                <th>Review ID</th>
+                <th>Ad ID</th>
+                <th>Technique ID</th>
+                <th>Feature</th>
+                <th>Character</th>
+            </tr>
+        {% for data in market %}
+
+            <tr>
+                {% for value in data %}
+                    <td>{{value}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </section>
+    <!-- Technique Tab -->
+    <section class="section">
+        <h2>Technique</h2>
+        <table>
+            <tr>
+                <th>Technique ID</th>
+                <th>Technique Name</th>
+            </tr>
+        {% for data in technique %}
+
+            <tr>
+                {% for value in data %}
+                    <td>{{value}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+    </form>
 </body>
 </html>
