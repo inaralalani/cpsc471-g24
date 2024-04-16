@@ -26,6 +26,7 @@ urlpatterns = [
     path('labelers-login.html', views.llogin, name='llogin'),
     path('labelers dashboard.html', views.ldashboard, name='ldashboard'),
     path('researchers dashboard.html',views.rdashboard, name='rdashboard'),
+    path('upload-data.html', views.udata, name='uploaddata'),
     path('new-dashboard.html',views.ndashboard, name='rdashboard'),
     path('landingpage.html', views.landing, name='landing'),
     path('researchers data.html', views.rdata, name='rdata'),

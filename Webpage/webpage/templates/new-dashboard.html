@@ -130,6 +130,50 @@ function parseCSV(csvData) {
 
     return videos;
 }
+// Function to generate labels within info boxes
+function generateLabels(labels, infoBox) {
+    var labelContainer = document.createElement("div");
+    labelContainer.className = "label-container";
+
+    labels.forEach(function(label) {
+        var labelElement = document.createElement("span");
+        labelElement.className = "label";
+        labelElement.textContent = label; // Set the text content to the parsed string
+        labelContainer.appendChild(labelElement);
+    });
+
+    infoBox.appendChild(labelContainer);
+}
+
+
+function fetchMarketingLabels(videoId, infoBox) {
+    fetch('data/MARKETING.csv')
+        .then(response => response.text())
+        .then(data => {
+            var labelsData = parseCSV(data);
+            var videoLabels = labelsData[videoId] || []; // Get labels for the specific video ID
+            generateLabels(videoLabels, infoBox);
+        })
+        .catch(error => {
+            console.error('Error fetching marketing CSV:', error);
+        });
+}
+
+
+function fetchFoodLabels(videoId, infoBox) {
+    fetch('data/FOODS.csv')
+        .then(response => response.text())
+        .then(data => {
+            var labelsData = parseCSV(data);
+            var videoLabels = labelsData[videoId] || []; // Get labels for the specific video ID
+            generateLabels(videoLabels, infoBox);
+        })
+        .catch(error => {
+            console.error('Error fetching marketing CSV:', error);
+        });
+}
+
+
 function generateVideos(videos) {
     var container = document.getElementById("videosContainer");
 
@@ -167,6 +211,9 @@ function generateVideos(videos) {
         videoWrapper.appendChild(showInfoButton);
         
         container.appendChild(videoWrapper);
+
+         fetchMarketingLabels(video, infoBox);
+         fetchFoodLabels(video, infoBox);
     });
 }
 
