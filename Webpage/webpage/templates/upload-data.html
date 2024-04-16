@@ -80,7 +80,9 @@
     var inputString = document.getElementById("textInput").value; // Get the value of the text input
     var splitCharacter = "watch?v=";
     var instance_id = inputString.split(splitCharacter); // Split the string
-  });
+    window.alert("Submission complete! You may upload additional instances if desired.");
+    document.getElementById("myForm").reset()
+});
     </script>
   
   </body>
