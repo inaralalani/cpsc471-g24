@@ -31,6 +31,7 @@ urlpatterns = [
     path("download-data.html", views.download_data, name="download_data"),
     path("landingpage.html", views.landing, name="landing"),
     path("researchers data.html", views.rdata, name="rdata"),
+    path("upload-data.html", views.udata, name="udata"),
     path("foods.html", views.fooddata, name="fooddata"),
     path("labels.html", views.labeldata, name="labeldata"),
     path("marketing.html", views.marketdata, name="marketdata"),
