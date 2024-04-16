@@ -66,6 +66,10 @@ def rdashboard(request):
 def rdata(request):
     return s.render(request, 'researchers data.html')
 
+def ndashboard(request):
+    return s.render(request, 'new-dashboard.html')
+
+
 def fooddata(request):
     db = duckdb.connect('m2kdashboard.db')  # get the db
     if request.method == "POST":

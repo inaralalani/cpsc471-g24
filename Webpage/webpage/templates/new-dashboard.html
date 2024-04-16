@@ -7,13 +7,15 @@
     <title>View M2K System Data</title>
     <style>
         body {
-            text-align: center;
             background: linear-gradient(to bottom, #334d50, #cbcaa5);
             color: white;
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column; /* Align items in a column */
+            align-items: center; /* Center items horizontally */
+            justify-content: flex-start; /* Align items at the start */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
         }
         main {
             background-color: rgba(255, 255, 255, 0.85);
@@ -21,18 +23,25 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 600px;
+            margin-top: 20px; /* Add margin to separate from the header */
         }
-        .button {
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #443ae7;
+            padding: 10px;
+            width: 100%; /* Make the navbar span full width */
+        }
+        .navbar-item {
             background-color: #28a745;
             color: white;
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 5px;
-            display: inline-block;
             transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
         }
-        .button:hover {
+        .navbar-item:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
@@ -57,79 +66,126 @@
             height: 100%;
             object-fit: cover;
         }
+        .info-box {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.9); /* Adjust transparency if needed */
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 0 0 8px 8px; /* Rounded corners only at the bottom */
+            max-width: calc(100% - 20px); /* Set maximum width equal to video frame width */
+        }
+        .show-info {
+            position: relative;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            max-width: calc(100% - 20px); /* Set maximum width equal to info box width */
+        }
+        .label {
+            display: inline-block;
+            background-color: #28a745; /* Button background color */
+            color: white; /* Text color */
+            padding: 5px 10px; /* Padding around text */
+            border-radius: 20px; /* Rounded corners */
+            margin-right: 10px; /* Spacing between labels */
+        }
     </style>
 </head>
 <body>
 
-<div id="header">
-    <a class="button" href="upload-data.html">Upload Data</a>
-    <a class="button" href="researchers dashboard.html">View Dashboard</a>
-    <a class="button" href="download-data.html">Download Data</a>
-    <a class="button" href="landingpage.html">Logout</a>
-  </div>
+<nav class="navbar">
+    <a class="navbar-item" href="upload-data.html">Upload Data</a>
+    <a class="navbar-item" href="researchers dashboard.html">View Dashboard</a>
+    <a class="navbar-item" href="download-data.html">Download Data</a>
+    <a class="navbar-item" href="landingpage.html">Logout</a>
+</nav>
 
-  <div class="container" id="videosContainer">
-    <!-- Videos will be dynamically embedded here -->
-  </div>
-  
-  <script>
-  // Function to parse CSV data
-  function parseCSV(csvData) {
+<main>
+    <div class="container" id="videosContainer">
+        <!-- Videos will be dynamically embedded here -->
+    </div>
+</main>
+
+<script>
+// Function to parse CSV data
+function parseCSV(csvData) {
     var lines = csvData.split('\n');
     var videos = [];
-  
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i].trim();
-      if (line) {
-        var columns = line.split(',');
-        if (columns.length >= 2) {
-          var videoId = columns[1].trim(); // Adjusted to get video ID from the second column
-          var embedUrl = 'https://www.youtube.com/watch?v=' + videoId;
-          videos.push({ videoId: videoId, embedUrl: embedUrl });
-        }
-      }
-    }
-  
-    return videos;
-  }
-  
-  // Function to generate video embeds
-  function generateVideos(videos) {
-    var container = document.getElementById("videosContainer");
-  
-    videos.forEach(function(video) {
-      var videoContainer = document.createElement("div");
-      videoContainer.className = "video-container";
-      
-      var iframe = document.createElement("iframe");
-      iframe.src = video.embedUrl;
-      iframe.title = "YouTube Video";
-      iframe.allowFullscreen = true;
-      iframe.frameBorder = 0;
-      
-      videoContainer.appendChild(iframe);
-      container.appendChild(videoContainer);
-    });
-  }
-  
-  // Function to fetch CSV data and generate video embeds
-  function fetchAndGenerateVideos() {
-    fetch('data/INSTANCES.csv')
-      .then(response => response.text())
-      .then(data => {
-        var videosData = parseCSV(data);
-        generateVideos(videosData);
-      })
-      .catch(error => {
-        console.error('Error fetching CSV:', error);
-      });
-  }
-  
-  // Call fetchAndGenerateVideos when the HTML page is opened
-  document.addEventListener('DOMContentLoaded', fetchAndGenerateVideos);
-  
-  </script>
 
-  
-  
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (line) {
+            var columns = line.split(',');
+            if (columns.length >= 2) {
+                var videoId = columns[1].trim(); // Adjusted to get video ID from the second column
+                var embedUrl = 'https://www.youtube.com/watch?v=' + videoId;
+                videos.push({ videoId: videoId, embedUrl: embedUrl });
+            }
+        }
+    }
+
+    return videos;
+}
+function generateVideos(videos) {
+    var container = document.getElementById("videosContainer");
+
+    videos.forEach(function(video) {
+        var videoWrapper = document.createElement("div");
+        videoWrapper.className = "video-wrapper";
+        
+        var videoContainer = document.createElement("div");
+        videoContainer.className = "video-container";
+        
+        // Create iframe for YouTube embed
+        var iframe = document.createElement("iframe");
+        iframe.src = video.embedUrl;
+        iframe.title = "YouTube Video";
+        iframe.allowFullscreen = true;
+        iframe.frameBorder = 0;
+        videoContainer.appendChild(iframe);
+        
+        videoWrapper.appendChild(videoContainer);
+        
+        // Create expandable information box
+        var infoBox = document.createElement("div");
+        infoBox.className = "info-box";
+        infoBox.textContent = "Additional information goes here...";
+        videoWrapper.appendChild(infoBox);
+        
+        // Create button to show/hide info box
+        var showInfoButton = document.createElement("button");
+        showInfoButton.className = "show-info";
+        showInfoButton.textContent = "Show Info";
+        showInfoButton.onclick = function() {
+            infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
+            showInfoButton.textContent = infoBox.style.display === "none" ? "Show Info" : "Hide Info";
+        };
+        videoWrapper.appendChild(showInfoButton);
+        
+        container.appendChild(videoWrapper);
+    });
+}
+
+// Function to fetch CSV data and generate video embeds
+function fetchAndGenerateVideos() {
+    fetch('data/INSTANCES.csv')
+        .then(response => response.text())
+        .then(data => {
+            var videosData = parseCSV(data);
+            generateVideos(videosData);
+        })
+        .catch(error => {
+            console.error('Error fetching CSV:', error);
+        });
+}
+
+// Call fetchAndGenerateVideos when the HTML page is opened
+document.addEventListener('DOMContentLoaded', fetchAndGenerateVideos);
+
+</script>
 </body>
+</html>
