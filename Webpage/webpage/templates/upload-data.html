@@ -66,21 +66,19 @@
   <h2>Upload a Marketing Instance</h2>
   <main>
     <div class="container" id="videosContainer">
-  <form id="myForm">
-    <label for="textInput">Youtube URL</label><br>
-    <input type="text" id="textInput" name="textInput"><br><br>
-    <button type="submit">Submit</button>
-  </form>
+ <form id="myForm" method="post"> 
+        <label for="textInput">Youtube URL</label><br>
+        <input type="text" id="textInput" name="textInput"><br><br>
+        <button type="submit">Submit</button>
+</form>
 </div>
 </main>
 
   <script>
   document.getElementById("myForm").addEventListener("submit", function(event){
     event.preventDefault(); // Prevent the default form submission
-    var inputString = document.getElementById("textInput").value; // Get the value of the text input
-    var splitCharacter = "watch?v=";
-    var instance_id = inputString.split(splitCharacter); // Split the string
-    window.alert("Submission complete! You may upload additional instances if desired.");
+  //  var inputString = document.getElementById("textInput").value; // Get the value of the text input
+  //  window.alert("Submission complete! You may upload additional instances if desired.");
     document.getElementById("myForm").reset()
 });
     </script>
