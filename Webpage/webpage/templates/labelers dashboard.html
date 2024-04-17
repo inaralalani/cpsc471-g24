@@ -81,33 +81,197 @@
     </div>
     
     <form id="myForm">
-        <h4>Part 1: Ad and food classification</h4>
-        <label for="option">Is this instance a food advertisement?</label>
-        <select id="option" name="option">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-        </select>
-        <label for="option">Is this instance a food advertisement?</label>
+        <label for="isad">Is this video an advertisement?</label>
+        <input type="radio" id="Yesad" name="isad" value="Yes" onclick="toggleFields()">
+        <label for="Yesad">Yes</label>
+        <input type="radio" id="Noad" name="isad" value="No" onclick="toggleFields()">
+        <label for="Noad">No</label><br>
 
-        <div id="descriptionField" class="hidden">
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description">
+        <div id="isFood" style="display: none;">
+            <label for="isFood">Is this instance a food advertisement?</label>
+            <input type="radio" id="Yesfood" name="isFood" value="Yes" onclick="toggleFoods()">
+            <label for="Yesfood">Yes</label>
+            <input type="radio" id="Nofood" name="isFood" value="No" onclick="toggleFoods()">
+            <label for="Nofood">No</label><br>
         </div>
+
+        <div id="foodFields" style="display: none;">
+            <label for="foodFields">How many distinct food items are in this instance?</label>
+            <input type="number" id="numFields" name="numfoodfields" min="1" max="10" onchange="generateFields()">
+
+        </div>
+
+        
+        <div id="techniquesContainer" style="display: none;">
+            <label for="techniques">Which brand is this advertisement? State the most prominent if several.</label><br>
+            <input type="text" id="adbrand" name="techniquesContainer">
+            <label for="techniques">Which techniques are present?</label><br>
+            <!-- Buttons for each technique -->
+            <button type="button" onclick="toggleDescription(1)">Technique 1</button>
+            <button type="button" onclick="toggleDescription(2)">Technique 2</button>
+            <button type="button" onclick="toggleDescription(3)">Technique 3</button>
+            <button type="button" onclick="toggleDescription(4)">Technique 4</button>
+            <button type="button" onclick="toggleDescription(5)">Technique 5</button>
+            <button type="button" onclick="toggleDescription(6)">Technique 6</button>
+            <button type="button" onclick="toggleDescription(7)">Technique 7</button>
+            <button type="button" onclick="toggleDescription(8)">Technique 8</button>
+            <button type="button" onclick="toggleDescription(9)">Technique 9</button>
+            <button type="button" onclick="toggleDescription(10)">Technique 10</button>
+            <button type="button" onclick="toggleDescription(11)">Technique 11</button>
+            <button type="button" onclick="toggleDescription(12)">Technique 12</button>
+            <button type="button" onclick="toggleDescription(13)">Technique 13</button>
+            <button type="button" onclick="toggleDescription(14)">Technique 14</button>
+            <button type="button" onclick="toggleDescription(15)">Technique 15</button>
+            <button type="button" onclick="toggleDescription(16)">Technique 16</button>
+            <button type="button" onclick="toggleDescription(17)">Technique 17</button>
+            <button type="button" onclick="toggleDescription(18)">Technique 18</button>
+            <button type="button" onclick="toggleDescription(19)">Technique 19</button>
+            <button type="button" onclick="toggleDescription(20)">Technique 20</button>
+            <button type="button" onclick="toggleDescription(21)">Technique 21</button>
+            <button type="button" onclick="toggleDescription(22)">Technique 22</button>
+            <button type="button" onclick="toggleDescription(23)">Technique 23</button>
+            <button type="button" onclick="toggleDescription(24)">Technique 24</button>
+            <button type="button" onclick="toggleDescription(25)">Technique 25</button>
+        </div>
+        <br>
+        <div id="descriptionFields"></div> <!-- append descriptions here -->
+        <br>
+
         <button type="submit">Submit</button>
     </form>
     </main>
 
     <script>
+        function toggleFields() {
+            var isad = document.querySelector('input[name="isad"]:checked').value;
+            var isFood = document.getElementById("isFood");
+            var foodFields = document.getElementById("foodFields");
+            var techniquelist = document.getElementById("techniquesContainer");
+
+            if (isad === 'Yes') {
+                isFood.style.display = 'block';
+                techniquelist.style.display = 'block';
+
+            } else {
+                isFood.style.display = 'none';
+                foodFields.style.display = 'none';
+                techniquelist.style.display = 'none';
+            }
+        }
+
+        function toggleFoods() {
+            var isFood = document.querySelector('input[name="isFood"]:checked').value;
+            var foodFields = document.getElementById("foodFields");
+            var techniquelist = document.getElementById("techniquesContainer");
+
+            if (isFood === 'Yes') {
+                foodFields.style.display = 'block';
+
+            } else {
+                foodFields.style.display = 'none';
+                document.getElementById("foodFields").reset();
+            }
+        }
+
+
+        function generateFields() {
+            var numFields = document.getElementById("numFields").value;
+            var foodFieldsContainer = document.getElementById("foodFields");
+            foodFieldsContainer.innerHTML = ""; // Clear existing fields
+
+            for (var i = 0; i < numFields; i++) {
+                var foodItemLabel = document.createElement("label");
+                foodItemLabel.textContent = "Food Item " + (i + 1) + ": ";
+
+                var foodItemInput = document.createElement("input");
+                foodItemInput.type = "text";
+                foodItemInput.name = "foodItemName" + (i + 1);
+                foodItemInput.placeholder = "Enter food item name";
+
+                foodFieldsContainer.appendChild(foodItemLabel);
+                foodFieldsContainer.appendChild(foodItemInput);
+                foodFieldsContainer.appendChild(document.createElement("br"));
+
+                var healthyLabel = document.createElement("label");
+                healthyLabel.textContent = "Is the food item healthy? ";
+
+                var radioYes = document.createElement("input");
+                radioYes.type = "radio";
+                radioYes.name = "foodItemHealthy" + (i + 1);
+                radioYes.value = "yes";
+                healthyLabel.appendChild(radioYes);
+                healthyLabel.appendChild(document.createTextNode("Yes"));
+
+                var radioNo = document.createElement("input");
+                radioNo.type = "radio";
+                radioNo.name = "foodItemHealthy" + (i + 1);
+                radioNo.value = "no";
+                healthyLabel.appendChild(radioNo);
+                healthyLabel.appendChild(document.createTextNode("No"));
+
+                foodFieldsContainer.appendChild(healthyLabel);
+                foodFieldsContainer.appendChild(document.createElement("br"));
+
+                var evaluationMethodLabel = document.createElement("label");
+                evaluationMethodLabel.textContent = "Evaluation Method: ";
+
+                var radioHealthCan = document.createElement("input");
+                radioHealthCan.type = "radio";
+                radioHealthCan.name = "evaluationMethod" + (i + 1);
+                radioHealthCan.value = "healthCan";
+                evaluationMethodLabel.appendChild(radioHealthCan);
+                evaluationMethodLabel.appendChild(document.createTextNode("Health Can"));
+
+                var radioUoft = document.createElement("input");
+                radioUoft.type = "radio";
+                radioUoft.name = "evaluationMethod" + (i + 1);
+                radioUoft.value = "uoft";
+                evaluationMethodLabel.appendChild(radioUoft);
+                evaluationMethodLabel.appendChild(document.createTextNode("UofT"));
+
+                var radioOther = document.createElement("input");
+                radioOther.type = "radio";
+                radioOther.name = "evaluationMethod" + (i + 1);
+                radioOther.value = "other";
+                evaluationMethodLabel.appendChild(radioOther);
+                evaluationMethodLabel.appendChild(document.createTextNode("Other"));
+
+                foodFieldsContainer.appendChild(evaluationMethodLabel);
+                foodFieldsContainer.appendChild(document.createElement("br"));
+            }
+        }
+
+        function toggleDescription(techniqueNumber) {
+            var descriptionFields = document.getElementById("descriptionFields");
+            var descriptionField = document.getElementById("descriptionField" + techniqueNumber);
+
+            if (descriptionField) {
+                // If description field exists, toggle its visibility
+                descriptionField.style.display = descriptionField.style.display === "none" ? "block" : "none";
+            } else {
+                // If description field doesn't exist, create it
+                var newDescriptionField = document.createElement("div");
+                newDescriptionField.id = "descriptionField" + techniqueNumber;
+                newDescriptionField.style.display = "block";
+
+                var label = document.createElement("label");
+                label.textContent = "Description for Technique " + techniqueNumber + ": ";
+
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "descriptionTechnique" + techniqueNumber;
+
+                newDescriptionField.appendChild(label);
+                newDescriptionField.appendChild(input);
+
+                // Insert the new description field below the corresponding button
+                var button = document.querySelector("#techniquesContainer button:nth-of-type(" + techniqueNumber + ")");
+                button.insertAdjacentElement("afterend", newDescriptionField);
+            }
+        }
+
         var ad_id = 42069;
         document.getElementById("ad_id").innerHTML = ad_id;
-        document.getElementById('option').addEventListener('change', function() {
-            var descriptionField = document.getElementById('descriptionField');
-            if (this.value === 'yes') {
-                descriptionField.classList.remove('hidden');
-            } else {
-                descriptionField.classList.add('hidden');
-            }
-        });
     </script>
 </body>
 </html>

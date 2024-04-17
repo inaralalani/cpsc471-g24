@@ -122,7 +122,7 @@ function parseCSV(csvData) {
             var columns = line.split(',');
             if (columns.length >= 2) {
                 var videoId = columns[1].trim(); // Adjusted to get video ID from the second column
-                var embedUrl = 'https://www.youtube.com/watch?v=' + videoId;
+                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
                 videos.push({ videoId: videoId, embedUrl: embedUrl });
             }
         }

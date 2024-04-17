@@ -38,6 +38,26 @@ class Instance:
     food_or_no: bool
 
 
+def upload_marketing_instance(request):
+    if request.method == 'POST':
+        youtube_url = request.POST.get('textInput')  # Get the input value from the form
+        split_character = "watch?v="
+        instance_id = request.POST.get('textInput')
+
+        # Connect to the DuckDB database
+        con = duckdb.connect('m2kdashboard.db')
+
+        # Assuming you have a table named MarketingInstances to store the instance data
+        # Replace MarketingInstances with your actual table name
+        query = f"INSERT INTO MarketingInstances (instance_id) VALUES ('{youtube_url}', '{instance_id}')"
+        
+        # Execute the query
+        con.execute(query)
+
+        return HttpResponse("Instance uploaded successfully!")  # You can customize the response message
+    else:
+        return HttpResponse("Invalid request method!")  # Handle invalid request method
+
 def download_data(request):
     db = duckdb.connect("m2kdashboard.db")
 

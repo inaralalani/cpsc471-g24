@@ -20,9 +20,36 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #e6ffef;
+            padding: 10px;
+            width: 100%; /* Make the navbar span full width */
+        }
+        .navbar-item {
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+        }
+        .navbar-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <a class="navbar-item" href="upload-data.html">Upload Data</a>
+        <a class="navbar-item" href="researchers dashboard.html">View Dashboard</a>
+        <a class="navbar-item" href="download-data.html">Download Data</a>
+        <a class="navbar-item" href="landingpage.html">Logout</a>
+    </nav>
+    
     <form method="post">
         {% csrf_token %}
         <label for="techniques">Techniques:</label>
