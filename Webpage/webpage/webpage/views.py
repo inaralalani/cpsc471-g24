@@ -129,17 +129,15 @@ def llogin(request):
 
 def ldashboard(request):
     db = duckdb.connect("m2kdashboard.db")  # get the db
-    minstance = db.sql("SELECT * FROM MarketingInstances WHERE labeller_id=NULL").fetchnumpy()
-    adid = minstance.get('ad_id')
-    hash = "https://www.youtube.com/embed/" + minstance.get('video_id')
+    minstance = db.sql("SELECT * FROM MarketingInstances WHERE labeller_id IS NULL").fetchnumpy()
+    adid = minstance.get('ad_id')[0]
+    hash = "https://www.youtube.com/embed/" + minstance.get('video_id')[0]
     print(adid)
     print(hash)
-    print('testy')
     context = {}
-    context['ad-id'] = adid
+    context['adid'] = adid
     context['hash'] = hash
     if request.method == "POST":
-
         id = request.POST.get("labeler-id")
         try:
             int(id)  # check if it's actually an int, so as not to throw errors
@@ -164,26 +162,63 @@ def ldashboard(request):
             return s.render(request, "landingpage.html")
     else:  # should be a get request, for submitting data
         # start getting all the form data
-        id = request.GET.get("user-id")
+        id = request.GET.get("reviewerID")
         try:
             int(id)  # check if it's actually an int, so as not to throw errors
         except:
-            id = -1  # again, just an error value
+            id = "NULL"  # again, just an error value
         adid = request.GET.get("ad-id")
-        food = request.GET.get("food-ad")
-        tech1 = request.GET.get("technique1")
-        prodname = request.GET.get("product-name")
-        bradname = request.GET.get("brand-name")
-        desc = request.GET.get("description1")
-        if food == "yes":
-            food = "true"
+        if adid == '--':
+            adid = -1
+        isad = request.GET.get('isad')
+        foodad = request.GET.get("isFood")
+        techs = []
+        for i in range(1,26):
+            if(request.GET.get('descriptionTechnique' + str(i)) != None and request.GET.get('descriptionTechnique' + str(i)) != '' ):
+                techs.append(request.GET.get('descriptionTechnique' + str(i)))
+            else:
+                techs.append(None)
+        foodnames = []
+        foodhealthy = []
+        foodeval = []
+        foodnum = -1
+        bradname = request.GET.get("techniquesContainer")
+        if isad == "Yes":
+            isad = "true"
         else:
-            food = "false"
+            isad = "false"
+        if foodad == "Yes":
+            foodad = "true"
+            for i in range(1,11):
+                if(request.GET.get("foodItemName" + str(i))) == None:
+                    break
+                else:
+                    foodnames.append(request.GET.get("foodItemName" + str(i)))
+                    foodhealthy.append(request.GET.get("foodItemHealthy" + str(i)))
+                    if(foodhealthy[len(foodhealthy)-1] == 'yes'):
+                        foodhealthy[len(foodhealthy)-1] = 'true'
+                    else:
+                        foodhealthy[len(foodhealthy)-1] = 'false'
+                    foodeval.append(request.GET.get("evaluationMethod" + str(i)))
+                    if(foodeval[len(foodhealthy)-1] == 'other'):
+                        foodeval[len(foodhealthy)-1] = 'limited'
+                    foodnum = i
+        else:
+            foodad = "false"
         db = duckdb.connect("m2kdashboard.db")  # get the db
-        num = (
-            db.sql("SELECT MAX(ad_id) FROM MarketingInstances").fetchnumpy().get("max(ad_id)")[0]
-        )  # get the largest current ad id
-        num = num + 1  # increment it
+        db.execute("UPDATE MarketingInstances SET labeller_id=?, ad_or_no=?, ad_brand=?, food_or_no=? WHERE ad_id=?", [id, isad, bradname, foodad, adid])
+        if(foodnum > 0):
+            if(foodnum == 1):
+                onemany = "false"
+            else:
+                onemany = "true"
+            for i in range(foodnum):
+                db.execute("INSERT INTO Foods(ad_id,one_many,name) VALUES (?,?,?)", [adid,onemany,foodnames[i]])
+                food_id = db.sql("Select MAX(food_id) FROM Foods").fetchnumpy().get('max(food_id)')[0]
+                db.execute("INSERT INTO Healthy(food_id, eval_method, healthiness) VALUES (?,?,?)", [int(food_id),foodeval[i], foodhealthy[i]])
+        for i in range(len(techs)):
+            if techs[i] != None:
+                db.execute("INSERT INTO Marketing(ad_id,technique_id,feature) VALUES (?,?,?)", [adid,i,techs[i]])
         return s.render(request, "labelers dashboard.html", context=context)  # get the dashboard
 
 

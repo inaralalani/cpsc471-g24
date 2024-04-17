@@ -83,7 +83,7 @@
     <form id="myForm" method="get">
         <label for="reviewerID">Please enter the User ID you used to sign in.</label>
         <input type="number" id="reviewerID" name="reviewerID">
-        
+        <input type="hidden" id="ad-id" name="ad-id" value={{adid}}></input>
         <label for="yes">Is this video an advertisement?</label>
         <input type="radio" id="yes" name="isad" value="Yes" onclick="toggleFields()">
         <label for="yes">Yes</label>
