@@ -224,7 +224,6 @@ def ndashboard(request):
     return s.render(request, "new-dashboard.html")
 
 def udata(request):
-    s.render(request, "upload-data.html")
     if request.method == 'POST':
         youtube_url = request.POST.get('textInput')  # Get the input value from the form
         split_character = "watch?v="
@@ -237,7 +236,7 @@ def udata(request):
 
         return HttpResponse("Instance uploaded successfully!")  
     else:
-        return HttpResponse("Invalid input - please try again.")  
+        return s.render(request, "upload-data.html")
 
 
 def fooddata(request):
