@@ -221,7 +221,7 @@ def rdata(request):
 
 
 def ndashboard(request):
-    return s.render(request, "new-dashboard.html")
+    return s.render(request, "researchers dashboard.html")
 
 def udata(request):
     if request.method == 'POST':
@@ -256,7 +256,7 @@ def labeldata(request):
     if request.method == "POST":
         label = formatlabel(request)
     else:
-        label = db.sql("SELECT * FROM Labels").fetchnumpy()  # same as the first
+        label = db.sql("SELECT * FROM MarketingInstances").fetchnumpy()  # same as the first
     labeltable = clabeltable(label)
     context = {}
     context["label"] = labeltable
@@ -283,46 +283,53 @@ def techdata(request):
     context["technique"] = techtable
     return s.render(request, "technique.html", context=context)
 
+def healthdata(request):
+    db = duckdb.connect("m2kdashboard.db")  # get the db
+    if request.method == "POST":
+        health = formathealth(request)
+    else:
+        health = db.sql("SELECT * FROM Healthy").fetchnumpy()
+    healthtable = chealthtable(health)
+    context = {}
+    context["healthy"] = healthtable
+    return s.render(request, "healthy.html", context=context)
 
-def formatfood(
-    request,
-):  # helper function to format the food sql request, you'll see more of these
+def formathealth(request):
     db = duckdb.connect("m2kdashboard.db")  # get the db
     foodfilter = request.POST.get("food-filter", None)
     foodeval = request.POST.get("food-eval", None)
-    foodname = request.POST.get("food-name")
     if (
-        foodfilter == "all"
-        and foodeval == "all"
-        and (foodname == None or foodname == "")
+            foodfilter == "all"
+            and foodeval == "all"
     ):  # show all data
+        healthreq = "SELECT * FROM Healthy"
+        health = db.sql(healthreq).fetchnumpy()
+        return health
+    else:
+        healthreq = "SELECT * FROM Healthy WHERE "
+        if foodfilter == "healthy":
+            healthreq += "healthiness='healthy'"
+        elif foodfilter == "unhealthy":
+            healthreq += "healthiness='unhealthy'"
+        if(foodfilter != "all" and foodeval != "all"):
+            healthreq += " AND "
+        if foodeval == "healthcan":
+            healthreq += "eval_method='health-can'"
+        elif foodeval == "uoft":
+            healthreq += "eval_method='uoft'"
+        elif foodeval == "limited":
+            healthreq += "eval_method='limited'"
+    health = db.sql(healthreq).fetchnumpy()
+    return health
+
+def formatfood(request):  # helper function to format the food sql request, you'll see more of these
+    db = duckdb.connect("m2kdashboard.db")  # get the db
+    foodname = request.POST.get("food-name")
+    if (foodname == None or foodname == ""):  # show all data
         foodreq = "SELECT * FROM Foods"
         food = db.sql(foodreq).fetchnumpy()
     else:
-        foodreq = "SELECT * FROM Foods WHERE "
-        if foodfilter == "healthy":
-            foodreq += "health='healthy'"
-            if foodeval == "healthcan" or foodeval == "uoft" or foodeval == "limited":
-                foodreq += " AND "
-        elif request.POST.get("food-filter") == "unhealthy":
-            foodreq += "health='unhealthy'"
-            if foodeval == "healthcan" or foodeval == "uoft" or foodeval == "limited":
-                foodreq += " AND "
-
-        if foodeval == "healthcan":
-            foodreq += "eval_method='health-can'"
-            if foodname != None and foodname != "":
-                foodreq += " AND "
-        elif foodeval == "uoft":
-            foodreq += "eval_method='uoft'"
-            if foodname != None and foodname != "":
-                foodreq += " AND "
-        elif foodeval == "limited":
-            foodreq += "eval_method='limited'"
-            if foodname != None and foodname != "":
-                foodreq += " AND "
-        if foodname != None and foodname != "":
-            foodreq += "name=?"
+        foodreq = "SELECT * FROM Foods WHERE name=?"
         food = db.execute(foodreq, [foodname]).fetchnumpy()
     return food
 
@@ -360,19 +367,25 @@ def formatmarket(request):
     elif featurename == None or featurename == "":
         return db.sql("SELECT * FROM Marketing").fetchnumpy()
 
+def chealthtable(health):
+    lenny = len(health.get("food_id"))
+    healthtable = [[None] * 3 for i in range(lenny)]
+    for i in range(lenny):  # create a row-by-row table
+        healthtable[i][0] = health.get("food_id")[i]
+        healthtable[i][1] = health.get("eval_method")[i]
+        healthtable[i][2] = health.get("healthiness")[i]
+    return healthtable
 
 def cfoodtable(food):
     lenny = len(food.get("food_id"))
     foodtable = [
-        [None] * 6 for i in range(lenny)
+        [None] * 4 for i in range(lenny)
     ]  # list of lists to make a table, initialized with enough size
     for i in range(lenny):  # create a row-by-row table
         foodtable[i][0] = food.get("food_id")[i]
         foodtable[i][1] = food.get("ad_id")[i]
         foodtable[i][2] = food.get("one_many")[i]
         foodtable[i][3] = food.get("name")[i]
-        foodtable[i][4] = food.get("eval_method")[i]
-        foodtable[i][5] = food.get("health")[i]
     return foodtable
 
 

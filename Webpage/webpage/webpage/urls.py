@@ -26,8 +26,8 @@ urlpatterns = [
     path("researchers-login.html", views.rlogin, name="rlogin"),
     path("labelers-login.html", views.llogin, name="llogin"),
     path("labelers dashboard.html", views.ldashboard, name="ldashboard"),
-    path("researchers dashboard.html", views.rdashboard, name="rdashboard"),
-    path("new-dashboard.html", views.ndashboard, name="rdashboard"),
+    path("old dash.html", views.rdashboard, name="rdashboard"),
+    path("researchers dashboard.html", views.ndashboard, name="rdashboard"),
     path("download-data.html", views.download_data, name="download_data"),
     path("landingpage.html", views.landing, name="landing"),
     path("researchers data.html", views.rdata, name="rdata"),
@@ -36,4 +36,5 @@ urlpatterns = [
     path("labels.html", views.labeldata, name="labeldata"),
     path("marketing.html", views.marketdata, name="marketdata"),
     path("technique.html", views.techdata, name="techdata"),
+    path("healthy.html", views.healthdata, name="healthdata")
 ]
