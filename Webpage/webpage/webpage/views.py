@@ -6,6 +6,9 @@ from django.template import loader
 from django.utils import timezone
 import django.shortcuts as s
 import duckdb
+adidassign = 3635
+foodidassign = 1487
+marketingassign = 8739
 
 
 @dataclass
@@ -225,10 +228,10 @@ def udata(request):
         instance_id = youtube_url.split(split_character); 
         # Connect to the DuckDB database
         con = duckdb.connect('m2kdashboard.db')
-        query = f"INSERT INTO MarketingInstances (instance_id) VALUES ('{instance_id}')"
+        query = f"INSERT INTO MarketingInstances (ad_id, instance_id) VALUES ('{adidassign}', '{instance_id}')"
+        adidassign = adidassign + 1
         # Execute the query
         con.execute(query)
-
         return HttpResponse("Instance uploaded successfully!")  
     else:
         return s.render(request, "upload-data.html")
