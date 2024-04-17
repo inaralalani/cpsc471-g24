@@ -124,8 +124,18 @@ def llogin(request):
 
 
 def ldashboard(request):
+    db = duckdb.connect("m2kdashboard.db")  # get the db
+    minstance = db.sql("SELECT * FROM MarketingInstances WHERE labeller_id=NULL").fetchnumpy()
+    adid = minstance.get('ad_id')
+    hash = "https://www.youtube.com/embed/" + minstance.get('video_id')
+    print(adid)
+    print(hash)
+    print('testy')
+    context = {}
+    context['ad-id'] = adid
+    context['hash'] = hash
     if request.method == "POST":
-        db = duckdb.connect("m2kdashboard.db")  # get the db
+
         id = request.POST.get("labeler-id")
         try:
             int(id)  # check if it's actually an int, so as not to throw errors
@@ -145,7 +155,7 @@ def ldashboard(request):
             )
             != 0
         ):  # if username and password combo exist
-            return s.render(request, "labelers dashboard.html")  # get the dashboard
+            return s.render(request, "labelers dashboard.html", context=context)  # get the dashboard
         else:  # otherwise go back to teh beginning for now
             return s.render(request, "landingpage.html")
     else:  # should be a get request, for submitting data
@@ -167,53 +177,38 @@ def ldashboard(request):
             food = "false"
         db = duckdb.connect("m2kdashboard.db")  # get the db
         num = (
-            db.sql("SELECT MAX(ad_id) FROM Labels").fetchnumpy().get("max(ad_id)")[0]
+            db.sql("SELECT MAX(ad_id) FROM MarketingInstances").fetchnumpy().get("max(ad_id)")[0]
         )  # get the largest current ad id
         num = num + 1  # increment it
-        db.sql(
-            "INSERT INTO LABELS (user_upload,ad_id,video_id,labeller_id,ad_or_no,ad_brand,product,food_or_no) VALUES (true,"
-            + str(num)
-            + ",'"
-            + adid
-            + "',"
-            + id
-            + ",true,'"
-            + bradname
-            + "','"
-            + prodname
-            + "',"
-            + food
-            + ")"
-        )
-        return s.render(request, "labelers dashboard.html")  # get the dashboard
+        return s.render(request, "labelers dashboard.html", context=context)  # get the dashboard
 
 
 def rdashboard(request):
+    db = duckdb.connect("m2kdashboard.db")  # get the db
+    thumbnails = db.sql("SELECT video_id FROM MarketingInstances").fetchnumpy().get("video_id")
+    technique = db.sql("SELECT * FROM Techniques")
+    marketing = db.sql("SELECT * FROM Marketing")
+    foods = db.sql("SELECT * FROM Foods")
+    print("testy")
+    print(thumbnails)
+    context = {}
+    context['thumbnails'] = thumbnails
+    context['technique'] = technique
+    context['marketing'] = marketing
+    context['food'] = foods
     if request.method == "POST":
-        db = duckdb.connect("m2kdashboard.db")  # get the db
         id = request.POST.get("researcher-id")
-
         try:
             int(id)  # check if it's actually an int, so as not to throw errors
         except:
             id = -1  # give -1 so it autofails the sql
         pas = request.POST.get("researcher-password")
-        if (
-            len(
-                db.execute(
-                    "SELECT * FROM Users WHERE user_id=? AND user_password=? AND user_type='researcher'",
-                    [str(id), pas],
-                )
-                .fetchnumpy()
-                .get("user_id")
-            )
-            != 0
-        ):  # if username and password combo exist
-            return s.render(request, "researchers dashboard.html")  # get the dashboard
+        if (len(db.execute("SELECT * FROM Users WHERE user_id=? AND user_password=? AND user_type='researcher'",[str(id), pas],).fetchnumpy().get("user_id")) != 0):  # if username and password combo exist
+            return s.render(request, "researchers dashboard.html", context=context)  # get the dashboard
         else:  # otherwise go back to teh beginning for now
             return s.render(request, "landingpage.html")
     else:
-        return s.render(request, "researchers dashboard.html")  # get the dashboard
+        return s.render(request, "researchers dashboard.html", context=context)  # get the dashboard
 
 
 def rdata(request):
