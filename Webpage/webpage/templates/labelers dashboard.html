@@ -76,16 +76,16 @@
         
         <h2>Marketing Instance Labelling</h2>
     <div>
-        <h3>Labelling Marketing Instance # <span id="ad_id"></span></h2>
-            <iframe width="800" height="600" src="https://www.youtube.com/embed/59pk8mfpnEc"></iframe>
+        <h3>Labelling Marketing Instance # {{adid}}</span></h3>
+            <iframe width="800" height="600" src={{hash}}></iframe>
     </div>
     
-    <form id="myForm">
-        <label for="isad">Is this video an advertisement?</label>
-        <input type="radio" id="Yesad" name="isad" value="Yes" onclick="toggleFields()">
-        <label for="Yesad">Yes</label>
-        <input type="radio" id="Noad" name="isad" value="No" onclick="toggleFields()">
-        <label for="Noad">No</label><br>
+    <form id="myForm" method="get">
+        <label for="yes">Is this video an advertisement?</label>
+        <input type="radio" id="yes" name="isad" value="Yes" onclick="toggleFields()">
+        <label for="yes">Yes</label>
+        <input type="radio" id="no" name="isad" value="No" onclick="toggleFields()">
+        <label for="no">No</label><br>
 
         <div id="isFood" style="display: none;">
             <label for="isFood">Is this instance a food advertisement?</label>
@@ -103,7 +103,7 @@
 
         
         <div id="techniquesContainer" style="display: none;">
-            <label for="techniques">Which brand is this advertisement? State the most prominent if several.</label><br>
+            <label for="adbrand">Which brand is this advertisement? State the most prominent if several.</label><br>
             <input type="text" id="adbrand" name="techniquesContainer">
             <label for="techniques">Which techniques are present?</label><br>
             <!-- Buttons for each technique -->
